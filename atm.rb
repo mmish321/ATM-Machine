@@ -16,11 +16,14 @@ class ATM
 		users.each {|user|
 			if input.to_i == user.pin && name == user.name
 				operate(user)
+				return
 			else
-				"Please try again, would you like to restart? Press 1 for yes, 2 for no"
-				choice = $stdin.gets.chomp
+				print "Please try again, would you like to restart? Press 1 for yes, 2 for no\n"
+				choice = $stdin.gets.chomp.to_i
 				if choice == 1
 					start
+				else
+					print "See you later alligator"
 				end
 			end
 		}
@@ -44,10 +47,9 @@ print ">"
 			user.quick_cash(user.money)
 		elsif option == 4
 			print "Good bye then!"
-			return
 		else
 			print "Invalid option... Try again\n"
-			start
+			operate(user)
 		end	
 	end
 
@@ -70,7 +72,10 @@ print ">"
 	end
 
 	def quick_cash(money)
-	
+		print "Enter what amount you want to withdraw"
+		quick_cash_amount = $stdin.gets.chomp.to_f
+		print "Alright you now have #{money-quick_cash_amount} now"
+		print "Good Bye!"
 	end
 
 end
