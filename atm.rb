@@ -9,24 +9,33 @@ class ATM
 
 
 	def start
-		puts "Please type your name\n"
+		print "Please type your name\n"
 		name = $stdin.gets.chomp
 		print "Please type your pin\n"
 		input = $stdin.gets.chomp
-		users.each {|user|
+		found = false
+		current = 0
+		for user in users
 			if input.to_i == user.pin && name == user.name
-				operate(user)
-				return
+				found = true
+				current = user
+				break
 			else
-				print "Please try again, would you like to restart? Press 1 for yes, 2 for no\n"
-				choice = $stdin.gets.chomp.to_i
-				if choice == 1
-					start
-				else
-					print "See you later alligator"
-				end
+				found = false
 			end
-		}
+		end
+		if found == true
+			operate(user)
+		else
+			print "I'm sorry that is an invald pin, would you like to try again?\n"
+			print "Press 1 for yes and 2 for no\n"
+			restart = $stdin.gets.chomp.to_i
+			if restart == 1
+				start
+			else
+				print "good bye!"
+			end
+		end
 	end
 
 	def operate(user)
@@ -56,7 +65,7 @@ print ">"
 	def deposit(money)
 		print "How much money would you like to deposit?\n"
 		deposit_amount = $stdin.gets.chomp.to_f
-		print "Alright you now have $#{money + deposit_amount} in your account"
+		print "Alright you now have $#{money + deposit_amount} in your account\n"
 		print "Good bye"
 	end
 	
@@ -64,7 +73,7 @@ print ">"
 		print "How much money would you like to withdraw from your account?\n"
 		withdraw_amount = $stdin.gets.chomp.to_f
 		if withdraw_amount > money
-			print "Sorry you don't have enough money"
+			print "Sorry you don't have enough money, come back when you have enough"
 		else
 			print "Alright you now have $#{money-withdraw_amount} in your account\n"
 			print "Good Bye"
