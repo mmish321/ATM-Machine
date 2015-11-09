@@ -31,6 +31,8 @@ This will open up all the files and code in sublime text.
 * How are the GUI and Adaptor supposed to work with the code? Like how are they set up so that the code can run with GOSU on a window ?
 * What is the difference between attr_accessor and attr_reader when you create an object? Also how do you have an object call a method on another one of its methods ? Is it self ?
 * When pushing an object into an array, are the properties of those objects seperate in the array or is the entire object, 1 element of the array? 
+    
+
     ```sh
     array = [(Jim,2014,12333333), (Mary,1234,123211)]
     array = [Jim,2014,121333,Mary,1234,12321321321]
