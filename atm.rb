@@ -9,6 +9,7 @@ class ATM
 
 
 	def start
+		print "Welcome to Fake ATM\n"
 		print "Please type your name\n"
 		name = $stdin.gets.chomp
 		print "Please type your pin\n"
