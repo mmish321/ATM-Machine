@@ -1,10 +1,11 @@
 
 class ATM
-	attr_reader :users
-	attr_accessor :users
+	attr_reader :users, :adapter
+	attr_accessor :users, :adapter
 
-	def initialize(users)
+	def initialize(users,adapter)
 		@users = users
+		@adapter = adapter
 	end
 
 
@@ -67,7 +68,7 @@ print ">"
 		print "How much money would you like to deposit?\n"
 		deposit_amount = $stdin.gets.chomp.to_f
 		print "Alright you now have $#{money + deposit_amount} in your account\n"
-		print "Good bye"
+		print "Good bye!"
 	end
 	
 	def withdraw(money)
@@ -77,14 +78,14 @@ print ">"
 			print "Sorry you don't have enough money, come back when you have enough"
 		else
 			print "Alright you now have $#{money-withdraw_amount} in your account\n"
-			print "Good Bye"
+			print "Good Bye!"
 		end
 	end
 
 	def quick_cash(money)
 		print "Enter what amount you want to withdraw"
 		quick_cash_amount = $stdin.gets.chomp.to_f
-		print "Alright you now have #{money-quick_cash_amount} now"
+		print "Alright you now have #{money-quick_cash_amount.round(2)} now"
 		print "Good Bye!"
 	end
 

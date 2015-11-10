@@ -1,9 +1,18 @@
 require "gosu"
 require_relative "user"
 require_relative "atm"
+require_relative "adapter"
 
 
 users = Array.new
+is_testing = ARGV.first
+
+if is_testing
+	adapter = Adapter.new
+else
+	adapter = Adapter.new
+	adapter.show_window
+end
 
 data=File.read("users.txt")
 
@@ -17,5 +26,5 @@ lines.each {|line|
 
 
 
-atm = ATM.new(users)
+atm = ATM.new(users,adapter)
 atm.start
