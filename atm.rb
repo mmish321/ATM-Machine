@@ -1,9 +1,9 @@
-
+require_relative "user"
 class ATM
 	attr_reader :users, :adapter
-	attr_accessor :users, :adapter
+	attr_accessor :users, :adapter, :current
 
-	def initialize(users,adapter)
+	def initialize(users)
 		@users = users
 		@adapter = adapter
 	end
@@ -27,7 +27,7 @@ class ATM
 			end
 		end
 		if found == true
-			operate(user)
+			operate(current)
 		else
 			print "I'm sorry that is an invald pin, would you like to try again?\n"
 			print "Press 1 for yes and 2 for no\n"
@@ -40,7 +40,7 @@ class ATM
 		end
 	end
 
-	def operate(user)
+	def operate(current)
 		print """
 Please Pick a Choice #{user.name}!
 1.Deposit
@@ -51,11 +51,11 @@ Please Pick a Choice #{user.name}!
 print ">"
 		option = $stdin.gets.chomp.to_i
 		if option == 1
-			deposit(user.money)
+			deposit(current)
 		elsif option == 2
-			withdraw(user.money)
+			withdraw(current)
 		elsif option == 3
-			user.quick_cash(user.money)
+			user.quick_cash(user.money,user)
 		elsif option == 4
 			print "Good bye then!"
 		else
@@ -64,25 +64,22 @@ print ">"
 		end	
 	end
 
-	def deposit(money)
+	def deposit(current)
 		print "How much money would you like to deposit?\n"
 		deposit_amount = $stdin.gets.chomp.to_f
+		user.deposit(current,deposit_amount)
 		print "Alright you now have $#{money + deposit_amount} in your account\n"
-		print "Good bye!"
 	end
 	
-	def withdraw(money)
+	def withdraw(current)
 		print "How much money would you like to withdraw from your account?\n"
 		withdraw_amount = $stdin.gets.chomp.to_f
-		if withdraw_amount > money
-			print "Sorry you don't have enough money, come back when you have enough"
-		else
-			print "Alright you now have $#{money-withdraw_amount} in your account\n"
-			print "Good Bye!"
-		end
+		user.withdraw(current,withdraw_amount)
+		if user.withdraw == false
+			"That is invalid amount sorry"
 	end
 
-	def quick_cash(money)
+	def quick_cash(money,user)
 		print "Enter what amount you want to withdraw"
 		quick_cash_amount = $stdin.gets.chomp.to_f
 		print "Alright you now have #{money-quick_cash_amount.round(2)} now"
