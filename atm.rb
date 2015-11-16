@@ -1,11 +1,11 @@
-require_relative "user"
+
 class ATM
-	attr_reader :users, :adapter
 	attr_accessor :users, :adapter, :current
 
 	def initialize(users)
 		@users = users
 		@adapter = adapter
+
 	end
 
 
@@ -16,31 +16,29 @@ class ATM
 		print "Please type your pin\n"
 		input = $stdin.gets.chomp
 		found = false
-		current = 0
-		for user in users
+		users.each {|user| 
 			if input.to_i == user.pin && name == user.name
+				@current = user
+				operate
 				found = true
-				current = user
-				break
-			else
-				found = false
 			end
-		end
-		if found == true
-			operate(current)
-		else
-			print "I'm sorry that is an invald pin, would you like to try again?\n"
-			print "Press 1 for yes and 2 for no\n"
-			restart = $stdin.gets.chomp.to_i
-			if restart == 1
+		}
+		if found == false
+			print "Sorry that was in invalid name/pin!\n"
+			print "Would you like to try again?\n"
+			puts "Press 1 for yes, 2 for no"
+			choice=$stdin.gets.chomp.to_i
+			if choice == 1
 				start
 			else
-				print "good bye!"
+				print "Good Bye!"
 			end
 		end
 	end
 
-	def operate(current)
+
+
+	def operate
 		print """
 Please Pick a Choice #{current.name}!
 1.Deposit
@@ -51,77 +49,85 @@ Please Pick a Choice #{current.name}!
 print ">"
 		option = $stdin.gets.chomp.to_i
 		if option == 1
-			deposit(current)
+			deposit
 		elsif option == 2
-			withdraw(current)
+			withdraw
 		elsif option == 3
-			quick_cash(current)
+			quick_cash
 		elsif option == 4
 			print "Good bye then!"
 		else
 			print "Invalid option... Try again\n"
-			operate(user)
+			operate
 		end	
 	end
 
-	def deposit(current)
+	def deposit
 		print "How much money would you like to deposit?\n"
 		deposit_amount = $stdin.gets.chomp.to_f
-		current.deposit(deposit_amount)
-		print "Alright you now have $#{current.money + deposit_amount} in your account\n"
+		current.money += deposit_amount
+		print "You now have #{current.money}\n"
+		another_choice
+	end
+	
+	def withdraw
+		print "How much money would you like to withdraw from your account?\n"
+		withdraw_amount = $stdin.gets.chomp.to_f
+		current.money -= withdraw_amount
+		print "You now have #{current.money}\n"
+		another_choice
+	end
+
+	def quick_cash
+print """
+Enter what amount you want to withdraw
+	1.$20
+	2.$30
+	3.$50
+	4.$60
+	5.$100	
+"""
+print ">"
+		amount = $stdin.gets.chomp.to_i
+		if amount == 1
+			subtract(20)	
+			another_choice
+		elsif amount == 2
+			subtract(30)		
+			another_choice
+		elsif amount == 3
+			subtract(50)		
+			another_choice
+		elsif amount == 4
+			subtract(60)
+			another_choice
+		elsif amount == 5
+			subtract(100)
+			another_choice
+		else
+			print "Invalid option... Try again\n"
+			quick_cash
+		end	
+
+	end
+	def another_choice
 		print "Would you like to do something else?\n"
 		print "Press 1 for yes and 2 for no\n"
 		choice = $stdin.gets.chomp.to_i
 		if choice == 1
-			operate(current)
+			operate
 		elsif choice == 2
 			print "Good bye"
 		else
-			print "invalid choice....restarting"
+			print "invalid choice....restarting\n"
 			start
 		end
 	end
-	
-	def withdraw(current)
-		print "How much money would you like to withdraw from your account?\n"
-		withdraw_amount = $stdin.gets.chomp.to_f
-		current.withdraw(withdraw_amount)
-		print "You know have #{current.money - withdraw_amount}"
-	end
-
-	def quick_cash(current)
-print """Enter what amount you want to withdraw
-		1.$20
-		2.$30
-		3.$50
-		4.$60
-		5.$100
-		"""
-		print ">"
-		amount = $stdin.gets.chomp.to_i
-		if amount == 1
-			subtract(current, 20)
-			current.quick_cash(current,20)
-		elsif amount == 2
-			subtract(current , 30)
-			current.quick_cash(current,30)
-		elsif amount == 3
-			subtract(current, 50)
-			current.quick_cash(current,50)
-		elsif amount == 4
-			subtract(current, 60)
-			current.quick_cash(current,60)
-		elsif amount == 5
-			subtract(current, 100)
-			current.quick_cash(current,100)
-		else
-			print "Invalid option... Try again\n"
-		end	
-	end
 	private
-			def subtract(current,amount)
-				if current
-				print "You now have $#{current-amount} in your account"
+			def subtract(amount)
+				current.money -= amount
+				puts "You now have #{current.money} in your account\n"
 			end
+				
 end
-end
+
